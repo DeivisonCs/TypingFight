@@ -1,0 +1,31 @@
+span {
+    a{
+        text-decoration: none;
+    }
+
+    button{
+        cursor: pointer;
+        color: #fff;
+        background-color: #1A88FF;
+
+        border: none;
+        border-radius: 13px;
+        box-shadow: 3px 3px 3px #00000063;
+        padding: 10px 8px;
+
+        &:hover{
+            background-color: #0d66c5;
+            box-shadow: 3px 3px 3px #00000063 inset;
+
+            p{
+                transform: scale(1.1);
+            }
+        }
+
+        p{
+            font-weight: 800;
+            font-size: 1em;
+            letter-spacing: 1px;
+        }
+    }
+}
