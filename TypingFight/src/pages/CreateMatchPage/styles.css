@@ -1,0 +1,132 @@
+section {
+    background-color: #00000070;
+    color: #fff;
+
+    position: absolute;
+    bottom: 50%;
+    right: 50%;
+    transform: translate(50%, 50%);
+
+    width: 80vw;
+    height: 80vh;
+    padding: 60px 50px;
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+form {
+    margin-top: 80px;
+    width: 50%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 4rem;
+
+    .input-field-div {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        
+        width: 60%;
+    }
+
+    .top-input-container{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        gap: 35px;
+        flex-wrap: wrap;
+
+        .protected-field-div {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            width: fit-content;
+
+            color: #ffffff9d;
+
+            .protected-input-div {
+                cursor: pointer;
+                background-color: #d9d9d9;
+                width: 40px;
+                height: 20px;
+                padding: 0px 2px;
+                border-radius: 30px;
+
+                display: flex;
+                align-items: center;
+                position: relative;
+
+                .protected-input-changer {
+                    display: block;
+                    position: absolute;
+                    right: 50%;
+
+                    background-color: #000;
+                    border-radius: 50%;
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+        }
+    }
+}
+
+input {
+    padding: 8px 10px 3px 10px;
+
+    font-size: 17px;
+    letter-spacing: 2px;
+    color: #fff;
+
+    border: none;
+    width: 100%;
+    background-color: transparent;
+    outline: none;
+}
+
+::placeholder{
+    color: #fff;
+    opacity: 59%;
+
+    text-align: center;
+}
+
+.input-bottom-line {
+    width: 110%;
+    height: 2px;
+    background-color: #000;
+
+    border-radius: 10px;
+}
+
+.protect-activated {
+    animation: deactiveProtect .4s linear forwards;
+}
+
+.protect-deactivated {
+    animation: activeProtect .4s linear forwards;
+}
+
+@keyframes activeProtect {
+    from {
+        right: 50%;
+    }
+    to {
+        right: 3%;
+    }
+}
+
+@keyframes deactiveProtect {
+    from {
+        right: 3%;
+    }
+    to {
+        right: 50%;
+    }
+}
