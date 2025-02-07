@@ -1,6 +1,8 @@
-import { io } from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
-const socket = io('ws://localhost:8080');
+const socket: Socket = io('ws://localhost:8080', {
+  autoConnect: false
+});
 
 export const createMatch = (matchName: string) => {
   socket.emit('createMatch', matchName);
@@ -14,9 +16,15 @@ export const disconnect = () => {
   socket.disconnect();
 };
 
-
+export const getMatches = () => {
+  socket.emit('getMatches');
+};
 
 // --------------- Ouvir eventos do servidor ---------------
+
+export const onGetMatches = (callback: any) => {
+  socket.on('allMatches', callback);
+};
 
 export const onMatchCreated = (callback: any) => {
   socket.on('matchCreated', callback);
@@ -37,3 +45,15 @@ export const onPlayerConnected = (callback: any) => {
 export const onDisconnect = (callback: any) => {
   socket.on('disconnect', callback);
 };
+
+// --------------- Off Sockets ---------------
+
+export const offGetMatches = (callback: (matches: any) => void) => {
+  socket.off('allMatches', callback);
+};
+
+// export const offMatchCreated = (callback: (matches: any) => void) => {
+//   socket.off('matchCreated', callback);
+// };
+
+export default socket;

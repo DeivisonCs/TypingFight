@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./styles.css";
 import InputComponent from "../../components/InputComponent";
 import ButtonComponent from "../../components/ButtonComponent";
-import { createMatch, onMatchCreated } from "../../service/SocketService";
+import socket, { createMatch, onMatchCreated } from "../../service/SocketService";
 
 const CreateMatchPage: React.FC = () => {
     const [isProtected, setIsProtected] = useState(false);
@@ -19,9 +19,17 @@ const CreateMatchPage: React.FC = () => {
         createMatch(name);
     }
 
-    onMatchCreated((roomId: string) => {
+    const handleMatchCreated = (roomId: string) => {
         console.log(`Match created with ID: ${roomId}`);
-    });
+    }
+
+    onMatchCreated(handleMatchCreated);
+
+    useEffect(() => {
+        if(!socket.connected){
+            socket.connect();
+        }
+    }, []);
 
     return (
         <section id="create-match-section">

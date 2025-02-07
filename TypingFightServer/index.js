@@ -8,7 +8,7 @@ const io = require('socket.io')(http, {
 matches = [];
 
 io.on('connection', (socket) => {
-    console.log("user connected");
+    console.log("user " +socket.id.substr(0, 2)+ " connected");
 
     socket.on('message', (message) => {
         console.log(message);
@@ -21,10 +21,30 @@ io.on('connection', (socket) => {
         matches[roomId] = { name: matchName, players: [socket.id.substr(0, 2)] }; // Armazena a partida
     
         socket.join(roomId); // Entra na sala
-        io.emit('matchCreated', "match created by: " + roomId); // Informa o criador da partida
+        socket.emit('matchCreated', "match created by: " + roomId); // Informa o criador da partida
         console.log(`Match Created: ${roomId} by user ${socket.id.substr(0, 2)}`);
         
         console.log(matches)
+    });
+    
+    socket.on('getMatches', () => {
+
+        socket.emit('allMatches', matches);
+        console.log(matches);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User Desconnected: ', socket.id.substr(0, 2));
+
+        for (const roomId in matches) {
+            matches[roomId].players = matches[roomId].players.filter(player => player !== socket.id);
+            
+            if (matches[roomId].players.length === 0) {
+                delete matches[roomId];
+                console.log(`Match ${roomId} deleted because all players left.`);
+            }
+        }
+        
     });
 });
 
