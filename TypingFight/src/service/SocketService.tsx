@@ -52,8 +52,8 @@ export const offGetMatches = (callback: (matches: any) => void) => {
   socket.off('allMatches', callback);
 };
 
-// export const offMatchCreated = (callback: (matches: any) => void) => {
-//   socket.off('matchCreated', callback);
-// };
+export const offMatchCreated = (callback: (matches: any) => void) => {
+  socket.off('matchCreated', callback);
+};
 
 export default socket;
