@@ -6,18 +6,22 @@ interface inputProps {
     name: string,
     type: string,
     maxLength: number,
-    placeholder: string;
+    placeholder: string,
+    value: string
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputComponent: React.FC<inputProps> = ({id, name, type, maxLength, placeholder}) => {
+const InputComponent: React.FC<inputProps> = ({id, name, type, maxLength, placeholder, value, onChange}) => {
     return (
         <div className="input-field-div">
             <input
                 id={id}
                 name={name}
+                value={value}
                 type={type}
                 maxLength={maxLength}
-                placeholder={placeholder}/>
+                placeholder={placeholder}
+                onChange={onChange}/>
             <span className="input-bottom-line"></span>
         </div>
     )

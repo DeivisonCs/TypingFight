@@ -3,33 +3,38 @@ import React, { useState } from "react";
 import "./styles.css";
 import InputComponent from "../../components/InputComponent";
 import ButtonComponent from "../../components/ButtonComponent";
+import { createMatch, onMatchCreated } from "../../service/SocketService";
 
 const CreateMatchPage: React.FC = () => {
     const [isProtected, setIsProtected] = useState(false);
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
 
     function changeProtect() {
         setIsProtected(!isProtected);
     }
+
+    function onSubmit() {
+        console.log("submited with name: " + name);
+        createMatch(name);
+    }
+
+    onMatchCreated((roomId: string) => {
+        console.log(`Match created with ID: ${roomId}`);
+    });
 
     return (
         <section id="create-match-section">
             <form>
                 <h1>Criar Partida</h1>
                 <div className="top-input-container">
-                    {/* <div className="input-field-div name-field-div">
-                        <input
-                            id="name-field"
-                            name="name-field"
-                            type="text"
-                            maxLength={30}
-                            placeholder="Nome da Partida"/>
-                        <span className="input-bottom-line"></span>
-                    </div> */}
                     <InputComponent 
                         id="name-field"
                         name="name-field"
                         type="text"
+                        value={name}
                         maxLength={30}
+                        onChange={(e) => setName(e.target.value)}
                         placeholder="Nome da Partida"/>
 
                     <div className="input-field-div protected-field-div">
@@ -41,23 +46,14 @@ const CreateMatchPage: React.FC = () => {
                     </div>
                 </div>
                 
-                { isProtected &&
-                    (
-                    // <div className="input-field-div password-field-div">
-                    //     <input 
-                    //         id="password-field" 
-                    //         name="password-field" 
-                    //         type="text" 
-                    //         maxLength={30}
-                    //         placeholder="Senha"/>
-                    //     <span className="input-bottom-line"></span>
-                    // </div>
-                    
+                { isProtected &&(
                     <InputComponent 
                     id="password-field"
                     name="password-field"
                     type="text"
+                    value={password}
                     maxLength={30}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Senha"/>)
                 }
 
@@ -65,7 +61,7 @@ const CreateMatchPage: React.FC = () => {
 
             <div className="buttons-container">
                 <ButtonComponent label="Voltar" width="250px" linkTo="/"/>
-                <ButtonComponent label="Criar" width="250px"/>
+                <ButtonComponent label="Criar" width="250px" onClick={onSubmit}/>
             </div>
         </section>
     )
