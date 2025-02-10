@@ -14,9 +14,27 @@ const CreateMatchPage: React.FC = () => {
         setIsProtected(!isProtected);
     }
 
+    function validDataInput(){
+        if(name == ''){
+            alert("Informe o nome da partida");
+            return false;
+        }
+
+        if(isProtected && password == ''){
+            alert("Informe a senha ou desative a proteção de sala");
+            return false;
+        }
+
+        return true;
+        
+    }
+
     function onSubmit() {
-        console.log("submited with name: " + name);
-        createMatch(name);
+        console.log("submited with name: " + name + " Protecd: " + isProtected);
+
+        if(validDataInput()){
+            createMatch(name, password);
+        }
     }
 
     useEffect(() => {
