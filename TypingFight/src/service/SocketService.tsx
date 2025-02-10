@@ -4,11 +4,18 @@ const socket: Socket = io('ws://localhost:8080', {
   autoConnect: false
 });
 
+export interface Match {
+  id: string,
+  name: string,
+  password: string,
+  players: string[],
+}
+
 export const createMatch = (matchName: string, password: string) => {
   socket.emit('createMatch', {name: matchName, password: password});
 };
 
-export const enterMatch = (roomId: string) => {
+export const enterMatch = (roomId: Match) => {
   socket.emit('enterMatch', roomId);
 };
 
@@ -32,6 +39,10 @@ export const onGetMatches = (callback: any) => {
 
 export const onMatchCreated = (callback: any) => {
   socket.on('matchCreated', callback);
+};
+
+export const onMatchAccepted = (callback: any) => {
+  socket.on('matchAccepted', callback);
 };
 
 export const onMatchEnteredSuccesfuly = (callback: any) => {
@@ -58,6 +69,10 @@ export const offGetMatches = (callback: (matches: any) => void) => {
 
 export const offMatchCreated = (callback: (matches: any) => void) => {
   socket.off('matchCreated', callback);
+};
+
+export const offMatchAccepted = (callback: (matches: any) => void) => {
+  socket.off('matchAccepted', callback);
 };
 
 export default socket;

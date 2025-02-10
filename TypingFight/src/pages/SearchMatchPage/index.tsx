@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 import "./styles.css";
 import ButtonComponent from "../../components/ButtonComponent";
-import socket, { onGetMatches, getMatches, offGetMatches } from "../../service/SocketService";
+import socket, { onGetMatches, getMatches, offGetMatches, enterMatch } from "../../service/SocketService";
+import { useNavigate } from "react-router-dom";
 
 export interface Match {
     id: string,
@@ -14,14 +15,19 @@ export interface Match {
 
 const SearchMatchPage: React.FC = () => {
     const hasExecuted = useRef(false);
-    // const hasListenerAdded = useRef(false);
     const [allMatches, setMatches] = useState<Match[]>([]);
+    const navigate = useNavigate();
 
     function getAllMatches() {
         console.log("requisição feita");
         getMatches();
     }
 
+    function selectMatch(match: Match) {
+        console.log('Entering Match');
+        enterMatch(match);
+        navigate("/on-match", {state: match});
+    }
 
     useEffect(() => {
 
@@ -33,9 +39,6 @@ const SearchMatchPage: React.FC = () => {
             console.log(matches);
             
             setMatches(matches);
-            // matches.forEach((match: Match) => {
-            //     console.log("=" + match);
-            // });
         };
 
         onGetMatches(handleGetMatches);
@@ -67,7 +70,7 @@ const SearchMatchPage: React.FC = () => {
                                 <tr key={match.id}>
                                     <td>{match.name}</td>
                                     <td>{match.password? 'Sim': 'Não'}</td>
-                                    <td><ButtonComponent label="Entrar" width="fit-content"/></td>
+                                    <td><ButtonComponent label="Entrar" width="fit-content" onClick={() => selectMatch(match)}/></td>
                                 </tr>)
                             })
                         }
