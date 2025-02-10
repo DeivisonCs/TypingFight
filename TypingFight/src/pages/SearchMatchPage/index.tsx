@@ -1,12 +1,21 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import "./styles.css";
 import ButtonComponent from "../../components/ButtonComponent";
 import socket, { onGetMatches, getMatches, offGetMatches } from "../../service/SocketService";
 
+export interface Match {
+    id: string,
+    name: string,
+    password: string,
+    players: string[],
+}
+
+
 const SearchMatchPage: React.FC = () => {
     const hasExecuted = useRef(false);
     // const hasListenerAdded = useRef(false);
+    const [allMatches, setMatches] = useState<Match[]>([]);
 
     function getAllMatches() {
         console.log("requisição feita");
@@ -20,12 +29,13 @@ const SearchMatchPage: React.FC = () => {
             socket.connect();
         }
 
-        const handleGetMatches = (matches: any) => {
-            console.log("matches");
+        const handleGetMatches = (matches: Match[]) => {
             console.log(matches);
-            matches.forEach((match: any) => {
-                console.log("=" + match);
-            });
+            
+            setMatches(matches);
+            // matches.forEach((match: Match) => {
+            //     console.log("=" + match);
+            // });
         };
 
         onGetMatches(handleGetMatches);
@@ -51,26 +61,16 @@ const SearchMatchPage: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>nome</td>
-                            <td>s/n</td>
-                            <td><ButtonComponent label="Entrar" width="fit-content"/></td>
-                        </tr>
-                        <tr>
-                            <td>nome</td>
-                            <td>s/n</td>
-                            <td><ButtonComponent label="Entrar" width="fit-content"/></td>
-                        </tr>
-                        <tr>
-                            <td>nome</td>
-                            <td>s/n</td>
-                            <td><ButtonComponent label="Entrar" width="fit-content"/></td>
-                        </tr>
-                        <tr>
-                            <td>nome</td>
-                            <td>s/n</td>
-                            <td><ButtonComponent label="Entrar" width="fit-content"/></td>
-                        </tr>
+
+                        {allMatches.map((match) => {
+                                return (
+                                <tr key={match.id}>
+                                    <td>{match.name}</td>
+                                    <td>{match.password? 'Sim': 'Não'}</td>
+                                    <td><ButtonComponent label="Entrar" width="fit-content"/></td>
+                                </tr>)
+                            })
+                        }
                     </tbody>
                 </table>
             </div>

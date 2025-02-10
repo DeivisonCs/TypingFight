@@ -4,8 +4,8 @@ const socket: Socket = io('ws://localhost:8080', {
   autoConnect: false
 });
 
-export const createMatch = (matchName: string) => {
-  socket.emit('createMatch', matchName);
+export const createMatch = (matchName: string, password: string) => {
+  socket.emit('createMatch', {name: matchName, password: password});
 };
 
 export const enterMatch = (roomId: string) => {
