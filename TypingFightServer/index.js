@@ -17,11 +17,11 @@ io.on('connection', (socket) => {
     })
     
     socket.on('createMatch', (match) => {
-        const roomId = `match_${Date.now()}`; // ID único para a partida
+        const roomId = `match_${Date.now()}_${socket.id.substr(0, 2)}`; // ID único para a partida
         matches[roomId] = { id: roomId, name: match.name, password: match.password, players: [socket.id.substr(0, 2)] }; // Armazena a partida
     
         socket.join(roomId); // Entra na sala
-        socket.emit('matchCreated', "match created by: " + roomId); // Informa o criador da partida
+        socket.emit('matchCreated', roomId); // Informa o criador da partida
         console.log(`Match Created: ${roomId} by user ${socket.id.substr(0, 2)}`);
         
         console.log(matches)
@@ -32,6 +32,11 @@ io.on('connection', (socket) => {
         socket.emit('allMatches', Object.values(matches));
         console.log(matches);
     });
+
+    socket.on('closeMatch', (matchId) => {
+        delete matches[matchId];
+        console.log(matches);
+    })
 
     socket.on('disconnect', () => {
         console.log('User Desconnected: ', socket.id.substr(0, 2));
