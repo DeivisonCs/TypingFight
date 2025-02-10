@@ -18,10 +18,10 @@ io.on('connection', (socket) => {
     
     socket.on('createMatch', (match) => {
         const roomId = `match_${Date.now()}_${socket.id.substr(0, 2)}`; // ID único para a partida
-        matches[roomId] = { id: roomId, name: match.name, password: match.password, players: [socket.id.substr(0, 2)] }; // Armazena a partida
+        matches[roomId] = { id: roomId, name: match.name, password: match.password, players: [socket.id.substr(0, 2)] };
     
         socket.join(roomId); // Entra na sala
-        socket.emit('matchCreated', roomId); // Informa o criador da partida
+        socket.emit('matchCreated', roomId);
         console.log(`Match Created: ${roomId} by user ${socket.id.substr(0, 2)}`);
         
         console.log(matches)
@@ -38,6 +38,16 @@ io.on('connection', (socket) => {
         console.log(matches);
     })
 
+    socket.on('enterMatch', (matchInfo) => {
+        matches[matchInfo.id].players.push(socket.id.substr(0, 2));
+        console.log(matches[matchInfo.id]);
+
+        socket.join(matchInfo.matchId);
+        io.to(matchInfo.id).emit('matchAccepted', matches[matchInfo.id]);
+
+        console.log('Second Player found');
+    })
+
     socket.on('disconnect', () => {
         console.log('User Desconnected: ', socket.id.substr(0, 2));
 
@@ -49,7 +59,6 @@ io.on('connection', (socket) => {
                 console.log(`Match ${roomId} deleted because all players left.`);
             }
         }
-        
     });
 });
 
