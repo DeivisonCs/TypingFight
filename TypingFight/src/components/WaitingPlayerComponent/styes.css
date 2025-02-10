@@ -1,0 +1,25 @@
+#waiting-component {
+    background-color: #000000e7;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 80vw;
+    height: 70vh;
+    max-width: 500px;
+    max-height: 300px;
+    padding: 20px;
+
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    & h1 {
+        color: #fff;
+        text-align: center;
+    }
+}

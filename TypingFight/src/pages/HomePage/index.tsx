@@ -12,7 +12,6 @@ const HomePage: React.FC = () => {
                 <ButtonComponent label="Buscar Partidas" width="250px" linkTo="/search-match"/>
                 <ButtonComponent label="Criar Partida" width="250px" linkTo="/create-match"/>
             </div>
-
         </section>
     );
 }

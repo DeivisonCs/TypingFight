@@ -20,6 +20,10 @@ export const getMatches = () => {
   socket.emit('getMatches');
 };
 
+export const closeMatch = (matchId: string) => {
+  socket.emit('closeMatch', matchId);
+};
+
 // --------------- Ouvir eventos do servidor ---------------
 
 export const onGetMatches = (callback: any) => {

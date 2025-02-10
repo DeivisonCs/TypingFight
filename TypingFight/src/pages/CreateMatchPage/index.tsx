@@ -4,11 +4,14 @@ import "./styles.css";
 import InputComponent from "../../components/InputComponent";
 import ButtonComponent from "../../components/ButtonComponent";
 import socket, { createMatch, offMatchCreated, onMatchCreated } from "../../service/SocketService";
+import WaitingPlayerComponent from "../../components/WaitingPlayerComponent";
 
 const CreateMatchPage: React.FC = () => {
     const [isProtected, setIsProtected] = useState(false);
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
+    const [waitingPlayer, setWaiting] = useState(false);
+    let [matchId, setMatchId] = useState('');
 
     function changeProtect() {
         setIsProtected(!isProtected);
@@ -26,15 +29,17 @@ const CreateMatchPage: React.FC = () => {
         }
 
         return true;
-        
     }
 
     function onSubmit() {
-        console.log("submited with name: " + name + " Protecd: " + isProtected);
-
         if(validDataInput()){
             createMatch(name, password);
+            setWaiting(true);
         }
+    }
+
+    function cancelWaiting(){
+        setWaiting(false);
     }
 
     useEffect(() => {
@@ -44,6 +49,7 @@ const CreateMatchPage: React.FC = () => {
 
         const handleMatchCreated = (roomId: string) => {
             console.log(`Match created with ID: ${roomId}`);
+            setMatchId(roomId);
         }
     
         onMatchCreated(handleMatchCreated);
@@ -93,6 +99,8 @@ const CreateMatchPage: React.FC = () => {
                 <ButtonComponent label="Voltar" width="250px" linkTo="/"/>
                 <ButtonComponent label="Criar" width="250px" onClick={onSubmit}/>
             </div>
+
+            {waitingPlayer && <WaitingPlayerComponent matchId={matchId} onClick={cancelWaiting}/>}
         </section>
     )
 }
