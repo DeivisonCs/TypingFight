@@ -5,7 +5,7 @@ const io = require('socket.io')(http, {
     cors: {origin: '*'}
 });
 
-matches = [];
+let matches = [];
 
 io.on('connection', (socket) => {
     console.log("user " +socket.id.substr(0, 2)+ " connected");
@@ -16,9 +16,9 @@ io.on('connection', (socket) => {
         io.emit('message', `${socket.id.substr(0, 2)} said: ${message}`)
     })
     
-    socket.on('createMatch', (matchName) => {
+    socket.on('createMatch', (match) => {
         const roomId = `match_${Date.now()}`; // ID único para a partida
-        matches[roomId] = { name: matchName, players: [socket.id.substr(0, 2)] }; // Armazena a partida
+        matches[roomId] = { id: roomId, name: match.name, password: match.password, players: [socket.id.substr(0, 2)] }; // Armazena a partida
     
         socket.join(roomId); // Entra na sala
         socket.emit('matchCreated', "match created by: " + roomId); // Informa o criador da partida
@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
     
     socket.on('getMatches', () => {
 
-        socket.emit('allMatches', matches);
+        socket.emit('allMatches', Object.values(matches));
         console.log(matches);
     });
 
