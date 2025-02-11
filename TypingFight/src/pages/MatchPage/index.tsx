@@ -30,10 +30,6 @@ const MatchPage: React.FC = () => {
 
     return(
         <section id="on-match-section">
-            {/* <h1>MatchPage</h1>
-            <h1>{match.players[0]}</h1>
-            <h1>{match.players[1]}</h1> */}
-
             <MatchFieldComponent player={false}/>
             <MatchFieldComponent player={true}/>
         </section>

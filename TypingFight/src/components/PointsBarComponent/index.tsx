@@ -19,7 +19,7 @@ const PointsBarComponent:React.FC<MatchProps> = ({player, points}) => {
                 style={{
                     boxShadow: player? '0px 5px 20px #fff': '0px -5px 20px #fff',
                     borderRadius: player? '0px 0px 30px 0px': '0px 30px 0px 0px',
-                    width: points
+                    width: `${points}%`
                 }}
             >
 

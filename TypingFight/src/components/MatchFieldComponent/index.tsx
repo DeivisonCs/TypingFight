@@ -13,9 +13,27 @@ const MatchFieldComponent: React.FC<MatchProps> = ({player}) => {
     const [letterIndex, setLetterIndex] = useState(0);
     const [allWords, setWords] = useState<string[]>([]);
     const [word, setWord] = useState('Ler');
+    const [writeTime, setWriteTime] = useState(0);
+    const [writeInterval, setWriteInterval] = useState<number|null>(null);
 
     function updatePoints() {
-        setPoints((prevPoints) => prevPoints+10);
+        let timePoints = points+1;
+
+        if(writeTime <= 2){
+            timePoints += 3;
+        }
+        else if(writeTime <= 4){
+            timePoints += 2;
+        }
+        else{
+            timePoints += 1;
+        }
+
+        if(timePoints > 100)
+            timePoints = 100;
+
+        console.log(timePoints)
+        setPoints(timePoints);
     }
 
     function sortWord() {
@@ -23,32 +41,59 @@ const MatchFieldComponent: React.FC<MatchProps> = ({player}) => {
         setWord(allWords[nextWord]);
     }
 
+    function startTimer() {
+        if(!writeInterval) {
+            const interval = setInterval(() => {
+                setWriteTime((prev) => prev + 1);
+            }, 1000);
+    
+            setWriteInterval(interval);
+        }
+    }
+
+    function resetTimer() {
+        if(writeInterval){
+            clearInterval(writeInterval);
+        }
+
+        updatePoints();
+        setWriteTime(0);
+        startTimer();
+    }
+
     useEffect(() => {
-        fetch('/words.txt')
-            .then(response => response.text())
-            .then(data => {
-                const wordArray = data.split(',').map(word => word.trim());
-                setWords(wordArray);
-            })
-            .catch((error) => console.error('Erro ao carregar as palavras:', error));
-
-
         const handleKeyDown = (event: KeyboardEvent) => {  
             if(event.key.toLowerCase() == word[letterIndex].toLowerCase()){
                 setLetterIndex((prevIndex) => prevIndex + 1);
             }
-
         };
 
-        if(letterIndex >= word.length){
-            sortWord();
-            setLetterIndex(0);
-        }
+        if(player){
+            startTimer();
 
-        window.addEventListener('keydown', handleKeyDown);
+            fetch('/words.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const wordArray = data.split(',').map(word => word.trim());
+                    setWords(wordArray);
+                })
+                .catch((error) => console.error('Erro ao carregar as palavras:', error));
+    
+            if(letterIndex >= word.length){
+                sortWord();
+                setLetterIndex(0);
+                resetTimer();
+            }
+    
+            window.addEventListener('keydown', handleKeyDown);
+        }
 
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
+
+            if(writeInterval){
+                clearInterval(writeInterval); 
+            }
         };
     }, [letterIndex]);
 
