@@ -3,12 +3,15 @@ import React, { useEffect, useRef, useState } from "react";
 import "./styles.css";
 import PointsBarComponent from "../PointsBarComponent";
 import WordComponent from "../WordComponent/WordComponent";
+import { registerPoints } from "../../service/SocketService";
 
 interface MatchProps {
     player: boolean
+    matchId: string
+    enemyPoints?: number
 }
 
-const MatchFieldComponent: React.FC<MatchProps> = ({player}) => {
+const MatchFieldComponent: React.FC<MatchProps> = (matchInfo) => {
     const [points, setPoints] = useState(0);
     const [letterIndex, setLetterIndex] = useState(0);
     const [allWords, setWords] = useState<string[]>([]);
@@ -29,11 +32,14 @@ const MatchFieldComponent: React.FC<MatchProps> = ({player}) => {
             timePoints += 1;
         }
 
+        console.log(timePoints)
         return Math.min(timePoints, 100);
     }
 
     function updatePoints() {
-        setPoints(calculatePoints());
+        const newPoints = calculatePoints();
+        setPoints(newPoints);
+        registerPoints(matchInfo.matchId, newPoints);
     }
 
     function sortWord() {
@@ -74,7 +80,7 @@ const MatchFieldComponent: React.FC<MatchProps> = ({player}) => {
             }
         };
 
-        if(player){
+        if(matchInfo.player){
             startTimer();
             loadWords();
     
@@ -98,17 +104,19 @@ const MatchFieldComponent: React.FC<MatchProps> = ({player}) => {
     }, [letterIndex, word]);
 
     const sectionStyle = {
-        backgroundColor: player ? 'rgb(253, 63, 63)' : 'rgb(83, 83, 255)',
-        height: player ? '65vh' : '35vh',
+        backgroundColor: matchInfo.player ? 'rgb(253, 63, 63)' : 'rgb(83, 83, 255)',
+        height: matchInfo.player ? '65vh' : '35vh',
     };
 
     return (
         <section 
             className="player-field-section" 
             style={sectionStyle}>
-                <PointsBarComponent player={player} points={points}/>
+                <PointsBarComponent 
+                    player={matchInfo.player} 
+                    points={matchInfo.enemyPoints? matchInfo.enemyPoints: points}/>
 
-                {player &&
+                {matchInfo.player &&
                     <div>
                         <WordComponent word={word} typed={letterIndex}/>
                     </div>

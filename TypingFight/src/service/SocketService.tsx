@@ -31,6 +31,10 @@ export const closeMatch = (matchId: string) => {
   socket.emit('closeMatch', matchId);
 };
 
+export const registerPoints = (matchId: string, points: number) => {
+  socket.emit('registerPoints', matchId, points);
+};
+
 // --------------- Ouvir eventos do servidor ---------------
 
 export const onGetMatches = (callback: any) => {
@@ -57,6 +61,10 @@ export const onPlayerConnected = (callback: any) => {
   socket.on('playerConnected', callback);
 };
 
+export const onPointsUpdate = (callback: any) => {
+  socket.on('pointsUpdate', callback);
+};
+
 export const onDisconnect = (callback: any) => {
   socket.on('disconnect', callback);
 };
@@ -73,6 +81,10 @@ export const offMatchCreated = (callback: (matches: any) => void) => {
 
 export const offMatchAccepted = (callback: (matches: any) => void) => {
   socket.off('matchAccepted', callback);
+};
+
+export const offPointsUpdate = (callback: (points: number, player: string) => void) => {
+  socket.on('pointsUpdate', callback);
 };
 
 export default socket;

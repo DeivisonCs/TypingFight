@@ -26,7 +26,12 @@ const SearchMatchPage: React.FC = () => {
     function selectMatch(match: Match) {
         console.log('Entering Match');
         enterMatch(match);
+        match.players.push(getId());
         navigate("/on-match", {state: match});
+    }
+
+    function getId(){
+        return socket.id!.slice(0, 2);
     }
 
     useEffect(() => {
