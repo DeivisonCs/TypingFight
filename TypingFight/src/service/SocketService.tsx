@@ -84,7 +84,7 @@ export const offMatchAccepted = (callback: (matches: any) => void) => {
 };
 
 export const offPointsUpdate = (callback: (points: number, player: string) => void) => {
-  socket.on('pointsUpdate', callback);
+  socket.off('pointsUpdate', callback);
 };
 
 export default socket;

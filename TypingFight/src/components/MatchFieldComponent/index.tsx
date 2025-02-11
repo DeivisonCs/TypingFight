@@ -3,15 +3,16 @@ import React, { useEffect, useRef, useState } from "react";
 import "./styles.css";
 import PointsBarComponent from "../PointsBarComponent";
 import WordComponent from "../WordComponent/WordComponent";
-import { registerPoints } from "../../service/SocketService";
+import socket, { registerPoints } from "../../service/SocketService";
 
 interface MatchProps {
-    player: boolean
+    player: string
     matchId: string
-    enemyPoints?: number
+    score: number
 }
 
 const MatchFieldComponent: React.FC<MatchProps> = (matchInfo) => {
+    const myId = socket.id!.slice(0, 2);
     const [points, setPoints] = useState(0);
     const [letterIndex, setLetterIndex] = useState(0);
     const [allWords, setWords] = useState<string[]>([]);
@@ -104,8 +105,8 @@ const MatchFieldComponent: React.FC<MatchProps> = (matchInfo) => {
     }, [letterIndex, word]);
 
     const sectionStyle = {
-        backgroundColor: matchInfo.player ? 'rgb(253, 63, 63)' : 'rgb(83, 83, 255)',
-        height: matchInfo.player ? '65vh' : '35vh',
+        backgroundColor: matchInfo.player == myId ? 'rgb(253, 63, 63)' : 'rgb(83, 83, 255)',
+        height: matchInfo.player == myId? '65vh' : '35vh',
     };
 
     return (
@@ -113,10 +114,11 @@ const MatchFieldComponent: React.FC<MatchProps> = (matchInfo) => {
             className="player-field-section" 
             style={sectionStyle}>
                 <PointsBarComponent 
+                    myId={myId}
                     player={matchInfo.player} 
-                    points={matchInfo.enemyPoints? matchInfo.enemyPoints: points}/>
+                    score={matchInfo.score}/>
 
-                {matchInfo.player &&
+                {matchInfo.player == myId &&
                     <div>
                         <WordComponent word={word} typed={letterIndex}/>
                     </div>

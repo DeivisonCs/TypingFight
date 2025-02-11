@@ -23,7 +23,7 @@ const WaitingPlayerComponent: React.FC<WaitingProps> = (props) => {
 
     function cancelMatch() {
         closeMatch(props.matchId);
-        console.log(props.matchId);
+
         props.onClick();
     }
 
@@ -33,7 +33,7 @@ const WaitingPlayerComponent: React.FC<WaitingProps> = (props) => {
         }
 
         const handleMatchAccepted = (match: Match) => {
-            console.log(`Match accepted`);
+
             navigate("/on-match", {state: match});
         }
 

@@ -19,14 +19,19 @@ const SearchMatchPage: React.FC = () => {
     const navigate = useNavigate();
 
     function getAllMatches() {
-        console.log("requisição feita");
         getMatches();
+    }
+
+    function setIdOnMatch(match: Match){
+        match.players.push('');
+        match.players[1] = match.players[0];
+        match.players[0] = getId();
     }
 
     function selectMatch(match: Match) {
         console.log('Entering Match');
         enterMatch(match);
-        match.players.push(getId());
+        setIdOnMatch(match);
         navigate("/on-match", {state: match});
     }
 
@@ -40,9 +45,7 @@ const SearchMatchPage: React.FC = () => {
             socket.connect();
         }
 
-        const handleGetMatches = (matches: Match[]) => {
-            console.log(matches);
-            
+        const handleGetMatches = (matches: Match[]) => {        
             setMatches(matches);
         };
 
