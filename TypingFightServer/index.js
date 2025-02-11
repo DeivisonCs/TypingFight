@@ -41,11 +41,17 @@ io.on('connection', (socket) => {
     socket.on('enterMatch', (matchInfo) => {
         matches[matchInfo.id].players.push(socket.id.substr(0, 2));
         console.log(matches[matchInfo.id]);
-
-        socket.join(matchInfo.matchId);
+        
+        socket.join(matches[matchInfo.id].id);
         io.to(matchInfo.id).emit('matchAccepted', matches[matchInfo.id]);
 
-        console.log('Second Player found');
+        console.log('Second Player found: ' + socket.id.substr(0, 2));
+    })
+
+    socket.on('registerPoints', (matchId, points) => {
+        console.log("Match: " + matchId + " player: " + socket.id.substr(0, 2) + " Points: " + points);
+
+        io.to(matchId).emit('pointsUpdate', {points: points, player: socket.id.substr(0, 2)});
     })
 
     socket.on('disconnect', () => {
