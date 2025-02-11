@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import MatchFieldComponent from "../../components/MatchFieldComponent";
+
+import "./styles.css";
 
 export interface Match {
     id: string,
@@ -9,19 +12,31 @@ export interface Match {
 }
 
 const MatchPage: React.FC = () => {
-    const location = useLocation();
-    const match: Match = location.state;
+    // const location = useLocation();
+    // const match: Match = location.state;
+    const match: Match = {
+        id: 'id',
+        name: 'teste',
+        password: 'dasd',
+        players: [
+            'player 1',
+            'player 2'
+        ]
+    };
 
     useEffect(() => {
         console.log('Match entered ' + match.name);
     }, []);
 
     return(
-        <div>
-            <h1>MatchPage</h1>
+        <section id="on-match-section">
+            {/* <h1>MatchPage</h1>
             <h1>{match.players[0]}</h1>
-            <h1>{match.players[1]}</h1>
-        </div>
+            <h1>{match.players[1]}</h1> */}
+
+            <MatchFieldComponent player={false}/>
+            <MatchFieldComponent player={true}/>
+        </section>
     )
 }
 

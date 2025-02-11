@@ -1,0 +1,17 @@
+div.point-bar-div {
+    height: 30px;
+    width: 100%;
+
+    background-color: transparent;
+
+    position: absolute;
+
+    span.points-bar {
+        height: 100%;
+        width: 50%;
+        background-color: #fff;
+
+        display: block;
+        border-radius: 0px 0px 10px 0px;
+    }
+}
