@@ -22,7 +22,7 @@ const MatchFieldComponent: React.FC<MatchProps> = ({player}) => {
         if(writeTime <= 1){
             timePoints += 3;
         }
-        else if(writeTime <= 3){
+        else if(writeTime <= 2){
             timePoints += 2;
         }
         else{

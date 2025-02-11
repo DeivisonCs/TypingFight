@@ -9,6 +9,22 @@ interface MatchProps {
 
 const PointsBarComponent:React.FC<MatchProps> = ({player, points}) => {
 
+    const getBarRadius = () => {
+        let border = '30';
+
+        if(player){
+            return `0px 0px ${points<100? border:0}px 0px`
+        }
+
+        return `0px ${points<100? border:0}px 0px 0px`
+    }
+
+    const pointBarStyle = {
+        boxShadow: player? '0px 5px 20px #fff': '0px -5px 20px #fff',
+        borderRadius: getBarRadius(),
+        width: `${points}%`
+    }
+
     return (
         <div className="point-bar-div"
             style={{'top': player? '0%': '100%',
@@ -16,11 +32,7 @@ const PointsBarComponent:React.FC<MatchProps> = ({player, points}) => {
             }}
         >
             <span className="points-bar" 
-                style={{
-                    boxShadow: player? '0px 5px 20px #fff': '0px -5px 20px #fff',
-                    borderRadius: player? '0px 0px 30px 0px': '0px 30px 0px 0px',
-                    width: `${points}%`
-                }}
+                style={pointBarStyle}
             >
 
             </span>
