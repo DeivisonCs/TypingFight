@@ -21,7 +21,6 @@ const PointsBarComponent:React.FC<MatchProps> = ({player, score, myId}) => {
     }
 
     const pointBarStyle = {
-        boxShadow: player == myId? '0px 5px 20px #fff': '0px -5px 20px #fff',
         borderRadius: getBarRadius(),
         width: `${score}%`
     }
@@ -32,7 +31,7 @@ const PointsBarComponent:React.FC<MatchProps> = ({player, score, myId}) => {
                 transform: player == myId? 'translateY(0%)' : 'translateY(-100%)',
             }}
         >
-            <span className="points-bar" 
+            <span className={`points-bar ${player == myId? 'my-bar': 'enemy-bar'}`}
                 style={pointBarStyle}
             >
 
