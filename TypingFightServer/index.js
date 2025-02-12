@@ -36,6 +36,8 @@ io.on('connection', (socket) => {
     socket.on('closeMatch', (matchId) => {
         delete matches[matchId];
         console.log(matches);
+
+        socket.leave(matchId);
     })
 
     socket.on('enterMatch', (matchInfo) => {
@@ -64,6 +66,17 @@ io.on('connection', (socket) => {
                 delete matches[roomId];
                 console.log(`Match ${roomId} deleted because all players left.`);
             }
+        }
+    });
+
+    socket.on('endGame', (matchId) => {
+        socket.leave(matchId);
+        console.log(`User ${socket.id.substr(0, 2)} left match ${matchId}`);
+
+        const room = io.of('/').adapter.rooms.get(matchId);
+
+        if(!room){
+            delete matches[matchId];
         }
     });
 });
