@@ -4,6 +4,7 @@ import MatchFieldComponent from "../../components/MatchFieldComponent";
 
 import "./styles.css";
 import socket, { offPointsUpdate, onPointsUpdate } from "../../service/SocketService";
+import EndGameComponent from "../../components/EndGameComponent";
 
 export interface Match {
     id: string,
@@ -17,17 +18,17 @@ const MatchPage: React.FC = () => {
     const match: Match = location.state;
     const [enemyPoints, setEnemyPoints] = useState(0);
     const [myPoints, setMyPoints] = useState(0);
-    // const match: Match = {
-    //     id: 'id',
-    //     name: 'teste',
-    //     password: 'dasd',
-    //     players: [
-    //         'player 1',
-    //         'player 2'
-    //     ]
-    // };
+    const [matchStatus, setMatchStatus] = useState(true);
 
     useEffect(() => {
+        if(myPoints >= 100 || enemyPoints >= 100){
+            setMatchStatus(false);
+        }
+
+    }, [myPoints, enemyPoints]);
+
+    useEffect(() => {
+
         if(!socket.connected){
             socket.connect();
         }
@@ -48,11 +49,24 @@ const MatchPage: React.FC = () => {
         };
     }, []);
 
+
     return(
         <section id="on-match-section">
-            <MatchFieldComponent player={match.players[1]} matchId={match.id} score={enemyPoints}/>
-            <MatchFieldComponent player={match.players[0]} matchId={match.id} score={myPoints}/>
-            {/* <h1>{match.players}</h1> */}
+            <MatchFieldComponent 
+                player={match.players[1]} 
+                matchId={match.id} 
+                score={enemyPoints}
+                status={matchStatus}/>
+
+            <MatchFieldComponent 
+                player={match.players[0]} 
+                matchId={match.id} 
+                score={myPoints}
+                status={matchStatus}/>
+
+            { !matchStatus && 
+                <EndGameComponent result={myPoints >= 100} matchId={match.id} players={match.players}/>
+            }
         </section>
     )
 }

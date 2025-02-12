@@ -35,6 +35,10 @@ export const registerPoints = (matchId: string, points: number) => {
   socket.emit('registerPoints', matchId, points);
 };
 
+export const endGame = (matchId: string) => {
+  socket.emit('endGame', matchId);
+};
+
 // --------------- Ouvir eventos do servidor ---------------
 
 export const onGetMatches = (callback: any) => {

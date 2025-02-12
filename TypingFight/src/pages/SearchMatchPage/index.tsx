@@ -29,7 +29,6 @@ const SearchMatchPage: React.FC = () => {
     }
 
     function selectMatch(match: Match) {
-        console.log('Entering Match');
         enterMatch(match);
         setIdOnMatch(match);
         navigate("/on-match", {state: match});

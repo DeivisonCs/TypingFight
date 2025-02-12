@@ -1,0 +1,59 @@
+div#end-game-background {
+    position: absolute;
+
+    top: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    margin: 0;
+
+    background-color: rgba(0, 0, 0, 0.788);
+
+}
+
+div#end-game-div {
+    background-color: #ffffffbb;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 80vw;
+    height: 70vh;
+    max-width: 500px;
+    max-height: 300px;
+    padding: 20px;
+
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px #ffffffbb;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    h2 {
+        color: #fff;
+        text-align: center;
+        font-family: "Fugaz One", serif;
+        letter-spacing: 2px;
+        font-size: 3em;
+    }
+}
+
+div#end-game-div.winner {
+    box-shadow: 0px 0px 50px rgb(96, 212, 85);
+
+    h2 {
+        color: rgb(62, 189, 50);
+    }
+}
+
+div#end-game-div.loser {
+    box-shadow: 0px 0px 50px rgb(255, 34, 34);
+
+    h2 {
+        color: rgb(255, 34, 34);
+    }
+}

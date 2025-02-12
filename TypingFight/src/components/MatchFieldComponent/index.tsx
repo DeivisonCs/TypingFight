@@ -9,6 +9,7 @@ interface MatchProps {
     player: string
     matchId: string
     score: number
+    status: boolean
 }
 
 const MatchFieldComponent: React.FC<MatchProps> = (matchInfo) => {
@@ -24,7 +25,7 @@ const MatchFieldComponent: React.FC<MatchProps> = (matchInfo) => {
         let timePoints = points+1;
 
         if(writeTime <= 1){
-            timePoints += 3;
+            timePoints += 50;
         }
         else if(writeTime <= 2){
             timePoints += 2;
@@ -33,7 +34,6 @@ const MatchFieldComponent: React.FC<MatchProps> = (matchInfo) => {
             timePoints += 1;
         }
 
-        console.log(timePoints)
         return Math.min(timePoints, 100);
     }
 
@@ -81,7 +81,7 @@ const MatchFieldComponent: React.FC<MatchProps> = (matchInfo) => {
             }
         };
 
-        if(matchInfo.player){
+        if(matchInfo.player && matchInfo.status){
             startTimer();
             loadWords();
     
