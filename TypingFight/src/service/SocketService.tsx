@@ -73,6 +73,10 @@ export const onPointsUpdate = (callback: any) => {
   socket.on('pointsUpdate', callback);
 };
 
+export const onMatchNotAvailable = (callback: any) => {
+  socket.on('matchNotAvailable', callback);
+};
+
 export const onDisconnect = (callback: any) => {
   socket.on('disconnect', callback);
 };
@@ -98,4 +102,9 @@ export const offPointsUpdate = (callback: (points: number, player: string) => vo
 export const offMatchesUpdate = (callback: any) => {
   socket.off('matchesUpdate', callback);
 };
+
+export const offMatchNotAvailable = (callback: any) => {
+  socket.off('matchNotAvailable', callback);
+};
+
 export default socket;

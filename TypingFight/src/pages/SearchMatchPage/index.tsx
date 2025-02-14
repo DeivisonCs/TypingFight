@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./styles.css";
 import ButtonComponent from "../../components/ButtonComponent";
 import socket, { onGetMatches, getMatches, offGetMatches, enterMatch, onMatchesUpdate, offMatchesUpdate } from "../../service/SocketService";
-import { useNavigate } from "react-router-dom";
+import EnteringMatchComponent from "../../components/EnteringMatchComponent";
 
 export interface Match {
     id: string,
@@ -16,26 +16,15 @@ export interface Match {
 const SearchMatchPage: React.FC = () => {
     const hasExecuted = useRef(false);
     const [allMatches, setMatches] = useState<Match[]>([]);
-    const navigate = useNavigate();
+    const [entering, setEntering] = useState(false);
 
     function getAllMatches() {
         getMatches();
     }
 
-    function setIdOnMatch(match: Match){
-        match.players.push('');
-        match.players[1] = match.players[0];
-        match.players[0] = getId();
-    }
-
     function selectMatch(match: Match) {
+        setEntering(true);
         enterMatch(match);
-        setIdOnMatch(match);
-        navigate("/on-match", {state: match});
-    }
-
-    function getId(){
-        return socket.id!.slice(0, 2);
     }
 
     useEffect(() => {
@@ -72,6 +61,7 @@ const SearchMatchPage: React.FC = () => {
     }, [])
 
     return (
+        <>
         <section id="search-match-section">
             <div className="matches-container">
                 <table>
@@ -99,7 +89,11 @@ const SearchMatchPage: React.FC = () => {
             <div className="buttons-container">
                 <ButtonComponent label="Voltar" width="250px" linkTo="/"/>
             </div>
+            
         </section>
+        
+        {entering && <EnteringMatchComponent closeComponent={() => setEntering(false)}/>}
+        </>
     )
 }
 

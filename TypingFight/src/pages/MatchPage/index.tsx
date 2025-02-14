@@ -34,7 +34,7 @@ const MatchPage: React.FC = () => {
         }
         
         const handlePointsUpdate = (output: any) => {
-            if(output.player == match.players[0]){
+            if(output.player == getId()){
                 setMyPoints(output.points);
             }
             else{
@@ -49,17 +49,28 @@ const MatchPage: React.FC = () => {
         };
     }, []);
 
+    function getPlayer(enemy: boolean) {
+        if(enemy) {
+            return match.players.find(player => player != getId())!;
+        }
+
+        return match.players.find(player => player == getId())!
+    }
+
+    function getId(){
+        return socket.id!.slice(0, 2);
+    }
 
     return(
         <section id="on-match-section">
             <MatchFieldComponent 
-                player={match.players[1]} 
+                player={getPlayer(true)} 
                 matchId={match.id} 
                 score={enemyPoints}
                 status={matchStatus}/>
 
             <MatchFieldComponent 
-                player={match.players[0]} 
+                player={getPlayer(false)} 
                 matchId={match.id} 
                 score={myPoints}
                 status={matchStatus}/>

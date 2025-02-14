@@ -1,31 +1,25 @@
 import React, { useEffect, useState } from "react";
-import ButtonComponent from "../ButtonComponent";
-
-import "./styles.css";
-import socket, { closeMatch, offMatchAccepted, onMatchAccepted } from "../../service/SocketService";
+import socket, { offMatchAccepted, offMatchNotAvailable, onMatchAccepted, onMatchNotAvailable } from "../../service/SocketService";
 import { useNavigate } from "react-router-dom";
 
-interface WaitingProps{
-    matchId: string
-    onClick: () => void
+import "./styles.css";
+
+interface EnteringProps {
+    closeComponent: () => void
 }
 
-export interface Match {
+interface Match {
     id: string,
     name: string,
     password: string,
     players: string[],
 }
 
-const WaitingPlayerComponent: React.FC<WaitingProps> = (props) => {
+const EnteringMatchComponent:React.FC<EnteringProps> = ({closeComponent}) => {
+
     const [dots, setDots] = useState<string>("");
     const navigate = useNavigate();
 
-    function cancelMatch() {
-        closeMatch(props.matchId);
-
-        props.onClick();
-    }
 
     useEffect(() => {
         if(!socket.connected){
@@ -34,9 +28,14 @@ const WaitingPlayerComponent: React.FC<WaitingProps> = (props) => {
 
         const handleMatchAccepted = (match: Match) => {
             navigate("/on-match", {state: match});
-        }
+        };
+
+        const handleMatchNotAvailable = () => {
+            closeComponent();
+        };
 
         onMatchAccepted(handleMatchAccepted);
+        onMatchNotAvailable(handleMatchNotAvailable);
 
         const waitingDotsInterval = setInterval(() => {
             setDots((prevDots) => {
@@ -50,16 +49,19 @@ const WaitingPlayerComponent: React.FC<WaitingProps> = (props) => {
         return () => {
             clearInterval(waitingDotsInterval)
             offMatchAccepted(handleMatchAccepted);
+            offMatchNotAvailable(handleMatchNotAvailable);
         };
     }, []);
 
     return (
-        <div id="waiting-component">
-            <h1>Esperando outro jogador{dots}</h1>
+        <div id="entering-game-background">
+            <div id="entering-game-div">
+                <h2>Entrando na partida{dots}</h2>
 
-            <ButtonComponent label="Cancelar" width="110px" onClick={cancelMatch}/>
+                {/* <ButtonComponent label="Voltar" width="110px"/> */}
+            </div>
         </div>
-    )
+    );
 }
 
-export default WaitingPlayerComponent;
+export default EnteringMatchComponent;
