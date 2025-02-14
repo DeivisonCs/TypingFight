@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import MatchFieldComponent from "../../components/MatchFieldComponent";
 
 import "./styles.css";
-import socket, { offPointsUpdate, onPointsUpdate } from "../../service/SocketService";
+import socket, { offPlayerLeftMatch, offPointsUpdate, onPlayerLeftMatch, onPointsUpdate } from "../../service/SocketService";
 import EndGameComponent from "../../components/EndGameComponent";
 
 export interface Match {
@@ -42,10 +42,17 @@ const MatchPage: React.FC = () => {
             }
         }
 
+        const handlePlayerLeftMatch = () => {
+            alert("Enemy Player Left Match")
+            setMyPoints(100);
+        }
+
         onPointsUpdate(handlePointsUpdate);
+        onPlayerLeftMatch(handlePlayerLeftMatch);
 
         return () => {
             offPointsUpdate(handlePointsUpdate);
+            offPlayerLeftMatch(handlePlayerLeftMatch);
         };
     }, []);
 

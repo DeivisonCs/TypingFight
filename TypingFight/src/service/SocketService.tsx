@@ -77,6 +77,10 @@ export const onMatchNotAvailable = (callback: any) => {
   socket.on('matchNotAvailable', callback);
 };
 
+export const onPlayerLeftMatch = (callback: any) => {
+  socket.on('playerLeftMatch', callback);
+};
+
 export const onDisconnect = (callback: any) => {
   socket.on('disconnect', callback);
 };
@@ -105,6 +109,11 @@ export const offMatchesUpdate = (callback: any) => {
 
 export const offMatchNotAvailable = (callback: any) => {
   socket.off('matchNotAvailable', callback);
+};
+
+
+export const offPlayerLeftMatch = (callback: any) => {
+  socket.off('playerLeftMatch', callback);
 };
 
 export default socket;
