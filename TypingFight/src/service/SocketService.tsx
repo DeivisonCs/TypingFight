@@ -53,6 +53,10 @@ export const onMatchAccepted = (callback: any) => {
   socket.on('matchAccepted', callback);
 };
 
+export const onMatchesUpdate = (callback: any) => {
+  socket.on('matchesUpdate', callback);
+};
+
 export const onMatchEnteredSuccesfuly = (callback: any) => {
   socket.on('matchEnteredSuccesfuly', callback);
 };
@@ -91,4 +95,7 @@ export const offPointsUpdate = (callback: (points: number, player: string) => vo
   socket.off('pointsUpdate', callback);
 };
 
+export const offMatchesUpdate = (callback: any) => {
+  socket.off('matchesUpdate', callback);
+};
 export default socket;

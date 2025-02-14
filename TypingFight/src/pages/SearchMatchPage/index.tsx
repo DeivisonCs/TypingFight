@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import "./styles.css";
 import ButtonComponent from "../../components/ButtonComponent";
-import socket, { onGetMatches, getMatches, offGetMatches, enterMatch } from "../../service/SocketService";
+import socket, { onGetMatches, getMatches, offGetMatches, enterMatch, onMatchesUpdate, offMatchesUpdate } from "../../service/SocketService";
 import { useNavigate } from "react-router-dom";
 
 export interface Match {
@@ -59,6 +59,17 @@ const SearchMatchPage: React.FC = () => {
             offGetMatches(handleGetMatches);
         };
     }, []);
+
+    useEffect(() => {
+
+        const handleMatchesUpdate = (matches: Match[]) => {
+            setMatches(matches);
+        }
+
+        onMatchesUpdate(handleMatchesUpdate);
+
+        return () => offMatchesUpdate(handleMatchesUpdate);
+    }, [])
 
     return (
         <section id="search-match-section">
