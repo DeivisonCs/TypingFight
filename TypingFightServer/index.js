@@ -1,3 +1,4 @@
+
 const door = 8080;
 const http = require('http').createServer();
 
@@ -18,7 +19,7 @@ io.on('connection', (socket) => {
     
     socket.on('createMatch', (match) => {
         const roomId = `match_${Date.now()}_${socket.id.substr(0, 2)}`; // ID único para a partida
-        matches[roomId] = { id: roomId, name: match.name, password: match.password, players: [socket.id.substr(0, 2)] };
+        matches[roomId] = { id: roomId, name: match.name, password: match.password, players: [socket.id.substr(0, 2)], status: 'open' };
     
         socket.join(roomId); // Entra na sala
         socket.emit('matchCreated', roomId);
@@ -28,9 +29,10 @@ io.on('connection', (socket) => {
     });
     
     socket.on('getMatches', () => {
+        const openMatches = Object.values(matches).filter(match => match.status == 'open');
 
-        socket.emit('allMatches', Object.values(matches));
-        console.log(matches);
+        socket.emit('allMatches', Object.values(openMatches));
+        console.log(openMatches);
     });
 
     socket.on('closeMatch', (matchId) => {
@@ -42,6 +44,7 @@ io.on('connection', (socket) => {
 
     socket.on('enterMatch', (matchInfo) => {
         matches[matchInfo.id].players.push(socket.id.substr(0, 2));
+        matches[matchInfo.id].status = 'on-match';
         console.log(matches[matchInfo.id]);
         
         socket.join(matches[matchInfo.id].id);
