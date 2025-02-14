@@ -17,13 +17,13 @@ io.on('connection', (socket) => {
     
         socket.join(roomId); // Entra na sala
         io.emit('matchCreated', roomId);
-        io.emit('matchesUpdate', filterOpenMatches());
+        io.emit('matchesUpdate', filterMatchesBy('open'));
 
         console.log(`Match Created: ${roomId} by user ${socket.id.substr(0, 2)}`);
     });
     
     socket.on('getMatches', () => {
-        const openMatches = filterOpenMatches();
+        const openMatches = filterMatchesBy('open');
 
         socket.emit('allMatches', Object.values(openMatches));
         console.log(openMatches);
@@ -33,12 +33,18 @@ io.on('connection', (socket) => {
         delete matches[matchId];
         console.log(matches);
 
-        io.emit('matchesUpdate', filterOpenMatches());
+        io.emit('matchesUpdate', filterMatchesBy('open'));
 
         socket.leave(matchId);
     })
 
     socket.on('enterMatch', (matchInfo) => {
+
+        if(matches[matchInfo.id].players.length >= 2 || matches[matchInfo.id].status != 'open'){
+            socket.emit('matchNotAvailable');
+            return;
+        }
+
         matches[matchInfo.id].players.push(socket.id.substr(0, 2));
         matches[matchInfo.id].status = 'on-match';
         console.log(matches[matchInfo.id]);
@@ -46,7 +52,7 @@ io.on('connection', (socket) => {
         socket.join(matches[matchInfo.id].id);
         io.to(matchInfo.id).emit('matchAccepted', matches[matchInfo.id]);
 
-        io.emit('matchesUpdate', filterOpenMatches());
+        io.emit('matchesUpdate', filterMatchesBy('open'));
 
         console.log('Second Player found: ' + socket.id.substr(0, 2));
     })
@@ -59,8 +65,14 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('User Desconnected: ', socket.id.substr(0, 2));
-
+        
         for (const roomId in matches) {
+            matches[roomId].players.map(player => {
+                if(player == socket.id.substr(0, 2)){
+                    io.to(roomId).emit('playerLeftMatch');
+                }
+            });
+
             matches[roomId].players = matches[roomId].players.filter(player => player !== socket.id);
             
             if (matches[roomId].players.length === 0) {
@@ -74,16 +86,21 @@ io.on('connection', (socket) => {
         socket.leave(matchId);
         console.log(`User ${socket.id.substr(0, 2)} left match ${matchId}`);
 
-        const room = io.of('/').adapter.rooms.get(matchId);
-
-        if(!room){
-            delete matches[matchId];
-        }
+        closeMatch(matchId);
     });
 });
 
-function filterOpenMatches(){
-    return Object.values(matches).filter(match => match.status == 'open');
+function closeMatch(matchId) {
+    const room = io.of('/').adapter.rooms.get(matchId);
+
+    if(!room){
+        console.log("Match " +matchId+ " closed");
+        delete matches[matchId];
+    }
+}
+
+function filterMatchesBy(filterName){
+    return Object.values(matches).filter(match => match.status == filterName);
 }
 
 
