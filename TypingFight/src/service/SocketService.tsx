@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 
-const socket: Socket = io('ws://typingfight.onrender.com', {
+const socket: Socket = io('wss://typingfight.onrender.com', {
   autoConnect: false
 });
 

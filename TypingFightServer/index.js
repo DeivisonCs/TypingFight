@@ -3,7 +3,11 @@ const door = process.env.PORT || 8080;
 const http = require('http').createServer();
 
 const io = require('socket.io')(http, {
-    cors: {origin: '*'}
+    cors: {
+        origin: 'https://typingfightgame.onrender.com',
+        methods: ['GET', 'POST'],
+        credentials: true
+    }
 });
 
 let matches = [];
