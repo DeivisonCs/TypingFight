@@ -25,7 +25,7 @@ const MatchFieldComponent: React.FC<MatchProps> = (matchInfo) => {
         let timePoints = points+1;
 
         if(writeTime <= 1){
-            timePoints += 50;
+            timePoints += 3;
         }
         else if(writeTime <= 2){
             timePoints += 2;
