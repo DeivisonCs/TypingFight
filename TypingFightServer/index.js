@@ -1,5 +1,5 @@
 
-const door = 8080;
+const door = process.env.PORT || 8080;
 const http = require('http').createServer();
 
 const io = require('socket.io')(http, {
