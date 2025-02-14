@@ -11,25 +11,19 @@ let matches = [];
 io.on('connection', (socket) => {
     console.log("user " +socket.id.substr(0, 2)+ " connected");
 
-    socket.on('message', (message) => {
-        console.log(message);
-
-        io.emit('message', `${socket.id.substr(0, 2)} said: ${message}`)
-    })
-    
     socket.on('createMatch', (match) => {
         const roomId = `match_${Date.now()}_${socket.id.substr(0, 2)}`; // ID único para a partida
         matches[roomId] = { id: roomId, name: match.name, password: match.password, players: [socket.id.substr(0, 2)], status: 'open' };
     
         socket.join(roomId); // Entra na sala
-        socket.emit('matchCreated', roomId);
+        io.emit('matchCreated', roomId);
+        io.emit('matchesUpdate', filterOpenMatches());
+
         console.log(`Match Created: ${roomId} by user ${socket.id.substr(0, 2)}`);
-        
-        console.log(matches)
     });
     
     socket.on('getMatches', () => {
-        const openMatches = Object.values(matches).filter(match => match.status == 'open');
+        const openMatches = filterOpenMatches();
 
         socket.emit('allMatches', Object.values(openMatches));
         console.log(openMatches);
@@ -38,6 +32,8 @@ io.on('connection', (socket) => {
     socket.on('closeMatch', (matchId) => {
         delete matches[matchId];
         console.log(matches);
+
+        io.emit('matchesUpdate', filterOpenMatches());
 
         socket.leave(matchId);
     })
@@ -49,6 +45,8 @@ io.on('connection', (socket) => {
         
         socket.join(matches[matchInfo.id].id);
         io.to(matchInfo.id).emit('matchAccepted', matches[matchInfo.id]);
+
+        io.emit('matchesUpdate', filterOpenMatches());
 
         console.log('Second Player found: ' + socket.id.substr(0, 2));
     })
@@ -83,6 +81,10 @@ io.on('connection', (socket) => {
         }
     });
 });
+
+function filterOpenMatches(){
+    return Object.values(matches).filter(match => match.status == 'open');
+}
 
 
 http.listen(door, () => console.log('listening on door ' + door));
