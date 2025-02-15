@@ -106,7 +106,7 @@ const SearchMatchPage: React.FC = () => {
             
         </section>
         
-        {entering && <EnteringMatchComponent closeComponent={() => setEntering(false)}/>}
+        {entering && <EnteringMatchComponent closeComponent={() => {setEntering(false); setCheckingPassowrd(false)}}/>}
         {checkingPassword && 
             <TypePasswordComponent 
                 pass={matchSelected!.password} 

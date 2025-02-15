@@ -31,7 +31,7 @@ const EnteringMatchComponent:React.FC<EnteringProps> = ({closeComponent}) => {
         };
 
         const handleMatchNotAvailable = () => {
-            alert("Partida já em andamento");
+            alert("Partida em andamento ou fechada pelo criador");
             closeComponent();
         };
 
