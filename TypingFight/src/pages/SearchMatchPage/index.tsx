@@ -4,6 +4,7 @@ import "./styles.css";
 import ButtonComponent from "../../components/ButtonComponent";
 import socket, { onGetMatches, getMatches, offGetMatches, enterMatch, onMatchesUpdate, offMatchesUpdate } from "../../service/SocketService";
 import EnteringMatchComponent from "../../components/EnteringMatchComponent";
+import TypePasswordComponent from "../../components/TypePasswordComponent";
 
 export interface Match {
     id: string,
@@ -16,15 +17,28 @@ export interface Match {
 const SearchMatchPage: React.FC = () => {
     const hasExecuted = useRef(false);
     const [allMatches, setMatches] = useState<Match[]>([]);
+    const [checkingPassword, setCheckingPassowrd] = useState(false);
     const [entering, setEntering] = useState(false);
+    const [matchSelected, setMatchSelected] = useState<Match>();
 
     function getAllMatches() {
         getMatches();
     }
 
-    function selectMatch(match: Match) {
+    function doEnterMatch(match: Match) {
         setEntering(true);
         enterMatch(match);
+    }
+
+    function selectMatch(match: Match) {
+        setMatchSelected(match);
+
+        if(match.password){
+            setCheckingPassowrd(true);
+            return;
+        }
+
+        doEnterMatch(match);
     }
 
     useEffect(() => {
@@ -93,6 +107,11 @@ const SearchMatchPage: React.FC = () => {
         </section>
         
         {entering && <EnteringMatchComponent closeComponent={() => setEntering(false)}/>}
+        {checkingPassword && 
+            <TypePasswordComponent 
+                pass={matchSelected!.password} 
+                onVerified={() => doEnterMatch(matchSelected!)}
+                onCanceled={() => setCheckingPassowrd(false)}/>}
         </>
     )
 }

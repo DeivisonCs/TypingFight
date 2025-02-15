@@ -20,7 +20,8 @@ input {
     text-align: center;
 }
 
-.input-bottom-line {
+.input-field-div .input-bottom-line {
+    display: block;
     width: 100%;
     height: 2px;
     background-image: linear-gradient(to right, #888888, #000, #888888);
