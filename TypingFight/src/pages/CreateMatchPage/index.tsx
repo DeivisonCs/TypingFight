@@ -48,7 +48,6 @@ const CreateMatchPage: React.FC = () => {
         }
 
         const handleMatchCreated = (roomId: string) => {
-            console.log(`Match created with ID: ${roomId}`);
             setMatchId(roomId);
         }
     
