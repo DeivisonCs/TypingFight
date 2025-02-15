@@ -44,6 +44,11 @@ io.on('connection', (socket) => {
 
     socket.on('enterMatch', (matchInfo) => {
 
+        if(!matches[matchInfo.id]){
+            socket.emit('matchNotAvailable');
+            return
+        }
+
         if(matches[matchInfo.id].players.length >= 2 || matches[matchInfo.id].status != 'open'){
             socket.emit('matchNotAvailable');
             return;
