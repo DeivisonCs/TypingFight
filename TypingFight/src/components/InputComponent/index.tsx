@@ -21,7 +21,8 @@ const InputComponent: React.FC<inputProps> = ({id, name, type, maxLength, placeh
                 type={type}
                 maxLength={maxLength}
                 placeholder={placeholder}
-                onChange={onChange}/>
+                onChange={onChange}
+                autoComplete="off"/>
             <span className="input-bottom-line"></span>
         </div>
     )
